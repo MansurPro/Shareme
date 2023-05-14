@@ -15,6 +15,8 @@ const Login = () => {
   
   const createOrGetUser = async (response) => {
     const { name, picture, sub } = jwt_decode(response.credential);
+
+    localStorage.setItem('user', JSON.stringify(sub));
   
     const doc = {
       _id: sub,
