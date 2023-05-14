@@ -2,18 +2,33 @@ import React from 'react';
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
+import jwt_decode from "jwt-decode";
 import shareVideo from '../assets/share.mp4';
 import logo from '../assets/logowhite.png';
 
-import { createOrGetUser } from '../utils/googleResponse';
+
+import { client } from '../utils/client';
 
 
 const Login = () => {
-
-  // const responseGoogle = (response) => {
-  //   localStorage.setItem('user', JSON.stringify(response));
-  //   createOrGetUser(response);
-  // }
+  const navigate = useNavigate();
+  
+  const createOrGetUser = async (response) => {
+    const { name, picture, sub } = jwt_decode(response.credential);
+  
+    const doc = {
+      _id: sub,
+      _type: 'user',
+      userName: name,
+      image: picture,
+    }
+  
+    client.createIfNotExists(doc)
+    .then(() => {
+      navigate('/', { replace: true});
+    })
+  };
+  
 
   return (
     <div className="flex justify-start items-center flex-col h-screen">
