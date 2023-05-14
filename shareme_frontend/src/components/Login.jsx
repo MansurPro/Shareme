@@ -5,13 +5,15 @@ import { FcGoogle } from 'react-icons/fc';
 import shareVideo from '../assets/share.mp4';
 import logo from '../assets/logowhite.png';
 
+import { createOrGetUser } from '../utils/googleResponse';
+
 
 const Login = () => {
 
-  const responseGoogle = (response) => {
-    console.log(response);
-    localStorage.setItem('user', JSON.stringify(response));
-  }
+  // const responseGoogle = (response) => {
+  //   localStorage.setItem('user', JSON.stringify(response));
+  //   createOrGetUser(response);
+  // }
 
   return (
     <div className="flex justify-start items-center flex-col h-screen">
@@ -48,8 +50,8 @@ const Login = () => {
                   <FcGoogle className='mr-4'/> Sign in with Google
                 </button>
               )}
-              onSuccess={responseGoogle}
-              onError={responseGoogle}
+              onSuccess={(response) => createOrGetUser(response)}
+              onError={() => console.log('error')}
               cookiePolicy="single_host_origin"
             />
           </div>
