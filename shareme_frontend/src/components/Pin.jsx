@@ -13,24 +13,43 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
   const [savingPost, setSavingPost] = useState(false);
   const user = fetchUser();
 
-  const alreadySaved = !!(save?.filter((item) => item.postedBy._id === user.googleId))?.length;
+  const alreadySaved = !!(save?.filter((item) => item?.postedBy?._id === user.googleId))?.length;
+  // const alreadySaved = save?.filter((item) => item.postedBy._id === user.googleId)?.length !== 0;
 
   const savePin = (id) => {
     if(!alreadySaved) {
       setSavingPost(true);
 
+      // client
+      // .patch(id)
+      // .setIfMissing({ save: [] })
+      // .insert('after', 'save[-1]', [{
+      //   _key: uuidv4(),
+      //   userId: user?.googleId,
+      //   postedBy: {
+      //     _type: 'postBy',
+      //     _ref: user?.googleId
+      //   }
+      // }])
+      // .commit()
+      // .then(() => {
+      //   window.location.reload();
+      //   setSavingPost(false);
+      // })
       client
       .patch(id)
+      // Ensure that the `reviews` arrays exists before attempting to add items to it
       .setIfMissing({ save: [] })
-      .insert('after', 'save[-1]', [{
-        _key: uuidv4(),
-        userId: user?.googleId,
+      .append('save', [{
         postedBy: {
-          _type: 'postBy',
+          _type: 'postedBy',
           _ref: user?.googleId
-        }
+        },
+        userId: user?.googleId
       }])
-      .commit()
+      .commit({
+        autoGenerateArrayKeys: true,
+      })
       .then(() => {
         window.location.reload();
         setSavingPost(false);
@@ -76,7 +95,7 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
                 >
                   {save?.length}  Saved
                 </button>
-              ): (
+              ) : (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
