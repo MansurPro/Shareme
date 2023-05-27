@@ -40,6 +40,7 @@ const CreatePin = ({ user }) => {
     }
   };
 
+  console.log(imageAsset);
   const savePin = () => {
     if (title && about && destination && imageAsset?._id && category) {
       const doc = {
@@ -49,10 +50,10 @@ const CreatePin = ({ user }) => {
         destination,
         image: {
           _type: 'image',
-          assets: {
+          asset: {
             _type: 'reference',
-            _ref: imageAsset?._id
-          }
+            _ref: imageAsset?._id,
+          },
         },
         userId: user._id,
         postedBy: {
