@@ -119,11 +119,13 @@ const PinDetail = ({ user }) => {
             <div className='max-h-370 overflow-y-auto'>
               {pinDetail?.comments?.map((comment, i) => (
                 <div className='flex gap-2 mt-5 items-center bg-white rounded-lg' key={i}>
-                  <img 
-                    src={comment.postedBy.image}
-                    alt='user-profile'
-                    className="w-10 h-10 rounded-full cursor-pointer"
-                  />
+                  <Link to={`/user-profile/${comment?.postedBy._id}`}>
+                    <img
+                      src={comment.postedBy.image}
+                      alt='user-profile'
+                      className="w-10 h-10 rounded-full cursor-pointer"
+                    />
+                  </Link>
                   <div className='flex flex-col'>
                     <p className='font-bold'>{comment.postedBy.userName}</p>
                     <p>{comment.comment}</p>
@@ -132,9 +134,7 @@ const PinDetail = ({ user }) => {
               ))}
             </div>
             <div className='flex flex-wrap mt-6 gap-3'>
-              <Link 
-                to={`/user-profile/${pinDetail?.postedBy._id}`}
-              >
+              <Link to={`/user-profile/${pinDetail?.postedBy._id}`}>
                 <img 
                   src={user?.image} 
                   className="w-10 h-10 rounded-full cursor-pointer" 
