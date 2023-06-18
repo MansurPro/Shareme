@@ -7,6 +7,7 @@ import { userQuery, userCreatedPinsQuery, userSavedPinsQuery } from '../utils/da
 import { client } from '../utils/client';
 import MasonryLayout from './MasonryLayout';
 import Spinner from './Spinner';
+import { fetchUser } from '../utils/fetchUser';
 
 const randomImage = 'https://source.unsplash.com/1600x900/?nature,photography,technology';
 
@@ -20,6 +21,7 @@ const UserProfile = () => {
   const [activeBtn, setActiveBtn] = useState('created');
   const navigate = useNavigate();
   const { userId } = useParams();
+  const currentUser = fetchUser();
 
   useEffect(() => {
     const query = userQuery(userId);
@@ -78,7 +80,7 @@ const UserProfile = () => {
               {user.userName}
             </h1>
             <div className='absolute top-0 z-1 right-0 p-2'>
-              {userId === user._id && (
+              {userId === currentUser && (
                   <button 
                     type='button'
                     className="bg-white p-2 rounded-full cursor-pointer outline-none shadow-md"
